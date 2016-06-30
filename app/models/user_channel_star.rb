@@ -1,0 +1,2 @@
+class UserChannelStar < ApplicationRecord
+end
