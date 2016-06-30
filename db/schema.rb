@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160630194032) do
+ActiveRecord::Schema.define(version: 20160630203106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,13 +24,13 @@ ActiveRecord::Schema.define(version: 20160630194032) do
 
   create_table "channels", force: :cascade do |t|
     t.string   "name"
-    t.string   "usernames",  default: [],              array: true
-    t.string   "type"
+    t.string   "usernames",    default: [],              array: true
+    t.string   "channel_type"
     t.string   "created_by"
     t.string   "topic"
     t.string   "purpose"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.integer  "group_id"
     t.index ["group_id"], name: "index_channels_on_group_id", using: :btree
   end
@@ -52,11 +52,11 @@ ActiveRecord::Schema.define(version: 20160630194032) do
     t.boolean  "beginning"
     t.text     "content"
     t.string   "sender"
-    t.integer  "timestamp"
     t.integer  "user_id"
     t.integer  "channel_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint   "timestamp"
     t.index ["channel_id"], name: "index_messages_on_channel_id", using: :btree
     t.index ["user_id"], name: "index_messages_on_user_id", using: :btree
   end
