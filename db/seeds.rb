@@ -5,3 +5,47 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+usernames = ["taliesin", "sean", "haizop", "neal616", "maddie"]
+full_names = ["Todd R.", "Sean O.", "Haiz O.", "Neal W.", "Maddie M."]
+icons = ["cornflowerblue", "plum", "lightcoral", "goldenrod", "forestgreen"]
+channels = ["general", "random", "private"]
+direct_message_users = [[0,1], [0,2], [0,2,3,4], [0,3], [0,4], [0,5], [0,1,2,3,4,5]]
+
+groups = Group.create([{group_name: "Webschool"}, {group_name: "Explorers"}])
+
+usernames.each_with_index do |username, i|
+  User.create(username: username, 
+              full_name: full_names[i], 
+              present: false,     
+              icon: icons[i])
+end
+
+groups.each do |group|
+  group_id = group.id
+  channels.each do |channel|
+    name = channel != "private" ? channel : group.group_name.downcase
+    Channel.create(name: channel,                 
+                   group_id: group_id, 
+                   private: channel == "private",
+                   channel_type: "group",
+                   created_by: usernames[0],
+                   topic: "Add a topic")
+  end
+  
+  direct_message_users.each do |u_list|
+    names = u_list.map{ |i| usernames[i] }
+    Channel.create(usernames: names,
+                   group_id: group_id,
+                   channel_type: "direct")
+  end
+  
+  User.all.each_with_index do |user, i|
+    user.group_users.create(group_id: group_id)
+    Channel.all.each do |channel|
+      channel_id = channel.id
+      if (channel_id + i) % 3 == 0
+        user.user_channel_stars.create(channel_id: channel_id)
+      end
+    end
+  end
+end
