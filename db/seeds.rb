@@ -5,11 +5,13 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-usernames = ["taliesin", "sean", "haizop", "neal616", "maddie"]
-full_names = ["Todd R.", "Sean O.", "Haiz O.", "Neal W.", "Maddie M."]
-icons = ["cornflowerblue", "plum", "lightcoral", "goldenrod", "forestgreen"]
+usernames = ["taliesin", "sean", "haizop", "neal616", "maddie", "bob"]
+full_names = ["Todd R.", "Sean O.", "Haiz O.", "Neal W.", "Maddie M.", "Bob Z."]
+icons = ["cornflowerblue", "plum", "lightcoral", "goldenrod", "forestgreen", "pink"]
 channels = ["general", "random", "private"]
-direct_message_users = [[0,1], [0,2], [0,2,3,4], [0,3], [0,4], [0,5], [0,1,2,3,4,5]]
+direct_message_users = [[0,1], [0,2], [0,2,3,4], [0,3], [0,4], [0,5], [0,1,2,3,4,5,6]]
+all_users = [0,1,2,3,4,5,6]
+private_channel_users = [0,1,2,3,4,5]
 
 groups = Group.create([{group_name: "Webschool"}, {group_name: "Explorers"}])
 
@@ -24,19 +26,23 @@ groups.each do |group|
   group_id = group.id
   channels.each do |channel|
     name = channel != "private" ? channel : group.group_name.downcase
-    Channel.create(name: channel,                 
-                   group_id: group_id, 
-                   private: channel == "private",
-                   channel_type: "group",
-                   created_by: usernames[0],
-                   topic: "Add a topic")
+    ch_record = Channel.create(name: channel,                 
+                             group_id: group_id, 
+                             private: channel == "private",
+                             channel_type: "group",
+                             created_by: usernames[0],
+                             topic: "Add a topic")
+                             
+    users = channel == "private" ? private_channel_users : all_users;
+    users.each { |u_id| ch_record.channel_users.create(user_id: u_id) }
   end
   
   direct_message_users.each do |u_list|
     names = u_list.map{ |i| usernames[i] }
-    Channel.create(usernames: names,
-                   group_id: group_id,
-                   channel_type: "direct")
+    ch_record = Channel.create(usernames: names,
+                             group_id: group_id,
+                             channel_type: "direct")
+    u_list.each { |u_id| ch_record.channel_users.create(user_id: u_id) }
   end
   
   User.all.each_with_index do |user, i|
