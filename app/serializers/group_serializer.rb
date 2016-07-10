@@ -1,7 +1,9 @@
 class GroupSerializer < ActiveModel::Serializer
   attributes :group_id, :group_name, :current_user,  :messages
   has_many :users
-  has_many :channels, key: :all_channels
+  has_many :channels, key: :all_channels do |serializer|
+    serializer.current_user.channels.where(group_id: serializer.group_id)
+  end
   
   
   def group_id
