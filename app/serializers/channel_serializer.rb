@@ -1,7 +1,15 @@
 class ChannelSerializer < ActiveModel::Serializer
-  attributes :id, :name, :usernames, :type, :created_by, :topic, :purpose
+  attributes :id, :name, :usernames, :channel_type, :created_by, :topic, :purpose, :starred
   
-  def type
-    object.channel_type
+  def starred
+    object.id.even? ? true : false
+  end
+  
+  def usernames
+    if object.channel_type == "direct"
+      object.users.pluck(:username)
+    else
+      []
+    end
   end
 end

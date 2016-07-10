@@ -10,7 +10,7 @@ class GroupsController < ApplicationController
 
   # GET /groups/1
   def show
-    render json: @group, user_id: group_params.user_id
+    render json: @group, user_id: params[:user_id]
   end
 
   # POST /groups
@@ -46,6 +46,6 @@ class GroupsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def group_params
-      params.require(:group).permit(:group_name, :user_id)
+      params.permit(:id, :user_id)
     end
 end

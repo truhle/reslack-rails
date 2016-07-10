@@ -18,12 +18,15 @@ groups = Group.create([{group_name: "Webschool"}, {group_name: "Explorers"}])
 usernames.each_with_index do |username, i|
   User.create(username: username, 
               full_name: full_names[i], 
-              present: false,     
+              present: false,
+              current_channel_id: 1,     
               icon: icons[i])
 end
 
 groups.each do |group|
+  
   group_id = group.id
+  
   channels.each do |channel|
     name = channel != "private" ? channel : group.group_name.downcase
     ch_record = Channel.create(name: channel,                 
@@ -33,6 +36,12 @@ groups.each do |group|
                              created_by: usernames[0],
                              topic: "Add a topic")
                              
+    ch_record.messages.create(beginning: true,
+                             content: "",
+                             group_id: group_id,
+                             user_id: 1,
+                             timestamp: 1466784530560)
+                             
     users = channel == "private" ? private_channel_users : all_users;
     users.each { |u_id| ch_record.channel_users.create(user_id: u_id) }
   end
@@ -40,9 +49,14 @@ groups.each do |group|
   direct_message_users.each do |u_list|
     names = u_list.map{ |i| usernames[i] }
     ch_record = Channel.create(usernames: names,
-                             group_id: group_id,
-                             channel_type: "direct")
-    u_list.each { |u_id| ch_record.channel_users.create(user_id: u_id) }
+                               group_id: group_id,
+                               channel_type: "direct")
+    ch_record.messages.create(beginning: true,
+                              content: "",
+                              group_id: group_id,
+                              user_id: 1,
+                              timestamp: 1466784530560)
+    u_list.each { |u_index| ch_record.channel_users.create(user_id: u_index + 1) }
   end
   
   User.all.each_with_index do |user, i|

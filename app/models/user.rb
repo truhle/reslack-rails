@@ -8,4 +8,7 @@ class User < ApplicationRecord
   has_many :user_channel_stars
   has_many :user_message_stars
   
+  def channels_by_group(group_id)     
+    channels.merge(Channel.where(group_id: group_id))
+  end
 end
