@@ -18,7 +18,7 @@ class GroupSerializer < ActiveModel::Serializer
   end
   
   def current_user
-    @current_user ||= object.users.find(instance_options[:user_id])
+    instance_options[:user]
   end
   
 end
