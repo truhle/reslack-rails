@@ -1,5 +1,6 @@
 class ChannelSerializer < ActiveModel::Serializer
-  attributes :id, :name, :usernames, :channel_type, :created_by, :topic, :purpose, :starred
+  
+  attributes :id, :name, :usernames, :channel_type, :created_by, :topic, :purpose, :private, :starred
   
   def starred
     object.id.even? ? true : false
