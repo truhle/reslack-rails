@@ -10,7 +10,13 @@ class GroupsController < ApplicationController
 
   # GET /groups/1
   def show
-    render json: @group, user: User.find(params[:user_id])
+    current_user = User.find(params[:user_id])
+    starred_channel_ids = current_user.starred_channel_ids_by_group(@group.id)
+    starred_message_ids = current_user.starred_message_ids_by_group(@group.id)
+    render json: @group, 
+           user: current_user, 
+           starred_channel_ids: starred_channel_ids,
+           starred_message_ids: starred_message_ids
   end
 
   # POST /groups
