@@ -1,4 +1,7 @@
 class MessagesController < ApplicationController
+  include ::ActionController::Serialization
+  
+  
   before_action :set_message, only: [:show, :update, :destroy]
 
   # GET /messages
@@ -16,10 +19,20 @@ class MessagesController < ApplicationController
   # POST /messages
   def create
     @message = Message.new(message_params)
+    # test_message = Message.first
 
     if @message.save
+      serializer = ActiveModel::Serializer.serializer_for(@message)
+      serializer_instance = serializer.new(@messsage, new_message: true)
+      
+      # Workaround for a bug giving a nil object on the first call to 
+      # serializer.new(@message)
+      if serializer_instance.object == nil
+        serializer_instance = serializer.new(@message, new_message: true)
+      end
+      message = serializer_instance.to_json
+      ActionCable.server.broadcast('messages', message)
       render json: :ok
-      ActionCable.server.broadcast('messages', @message.to_json)
     else
       render json: @message.errors, status: :unprocessable_entity
     end
