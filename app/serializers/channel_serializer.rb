@@ -2,10 +2,6 @@ class ChannelSerializer < ActiveModel::Serializer
   
   attributes :id, :name, :usernames, :channel_type, :created_by, :topic, :purpose, :private, :starred
   
-  # def current_user
-  #   instance_options[:user]
-  # end
-  
   def starred
     instance_options[:starred_channel_ids].include?(object.id)
   end
