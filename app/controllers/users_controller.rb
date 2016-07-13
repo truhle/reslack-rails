@@ -26,8 +26,8 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
-    if @user.update(user_params)
-      render json: @user
+    if user_has_channel? && @user.update(current_channel_id: params[:current_channel_id].to_i)
+      render json: :ok
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -39,6 +39,10 @@ class UsersController < ApplicationController
   end
 
   private
+    def user_has_channel?
+      @user.channels.pluck(:id).include?(params[:current_channel_id].to_i)
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
