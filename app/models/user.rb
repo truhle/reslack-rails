@@ -10,6 +10,8 @@ class User < ApplicationRecord
   has_many :user_message_stars
   has_many :starred_messages, through: :user_message_stars, source: :message
   
+  has_secure_password
+  
   def channels_by_group(group_id)     
     channels.merge(Channel.where(group_id: group_id))
   end

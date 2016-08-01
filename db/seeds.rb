@@ -16,7 +16,9 @@ private_channel_users = [0,1,2,3,4,5]
 groups = Group.create([{group_name: "Webschool"}, {group_name: "Explorers"}])
 
 usernames.each_with_index do |username, i|
-  User.create(username: username, 
+  User.create(username: username,
+              email: "#{username}@example.com",
+              password: "secret",
               full_name: full_names[i], 
               present: false,
               current_channel_id: 1,     
