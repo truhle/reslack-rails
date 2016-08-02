@@ -13,7 +13,16 @@ direct_message_users = [[0,1], [0,2], [0,2,3,4], [0,3], [0,4], [0,5], [0,1,2,3,4
 all_users = [0,1,2,3,4,5,6]
 private_channel_users = [0,1,2,3,4,5]
 
-groups = Group.create([{group_name: "Webschool"}, {group_name: "Explorers"}])
+groups = Group.create([
+  {
+    group_name: "Webschool",
+    group_prefix: "webschool"
+  }, 
+  {
+    group_name: "Explorers",
+    group_prefix: "explorers"
+  }
+])
 
 usernames.each_with_index do |username, i|
   User.create(username: username,

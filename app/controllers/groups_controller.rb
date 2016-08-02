@@ -18,6 +18,13 @@ class GroupsController < ApplicationController
            starred_channel_ids: starred_channel_ids,
            starred_message_ids: starred_message_ids
   end
+  
+  # GET /group_ids/group_prefix
+  def show_id
+    @group = Group.find_by(group_prefix: params[:group_prefix])
+    group_id = @group.id
+    render json: {group_id: group_id}
+  end
 
   # POST /groups
   def create
@@ -52,6 +59,6 @@ class GroupsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def group_params
-      params.permit(:id, :user_id)
+      params.permit(:id, :user_id, :group_prefix)
     end
 end
