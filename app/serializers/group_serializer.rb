@@ -1,5 +1,5 @@
 class GroupSerializer < ActiveModel::Serializer
-  attributes :group_id, :group_name, :current_user,  :messages
+  attributes :group_id, :group_name, :group_prefix, :current_user,  :messages
   has_many :users
   
   has_many :channels, key: :all_channels do |serializer|

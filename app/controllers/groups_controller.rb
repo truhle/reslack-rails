@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_action :set_group, only: [:show, :update, :destroy]
+  before_action :set_group, only: [:update, :destroy]
 
   # GET /groups
   def index
@@ -8,8 +8,9 @@ class GroupsController < ApplicationController
     render json: @groups
   end
 
-  # GET /groups/1
+  # GET /groups/group_prefix
   def show
+    @group = Group.find_by(group_prefix: params[:id])
     current_user = User.find(params[:user_id])
     starred_channel_ids = current_user.starred_channel_ids_by_group(@group.id)
     starred_message_ids = current_user.starred_message_ids_by_group(@group.id)
