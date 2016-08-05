@@ -1,5 +1,6 @@
 class Session < ApplicationRecord
   before_create :generate_token
+  belongs_to :user
   
 private
   def generate_token
