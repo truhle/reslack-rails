@@ -1,7 +1,8 @@
 class User < ApplicationRecord
-  validates :username, presence: true, uniqueness: true
+  validates :email, :username, presence: true, uniqueness: true
   has_many :channel_users
   has_many :channels, through: :channel_users
+  has_many :sessions
   has_many :starred_channels, through: :user_channel_stars, source: :channel
   has_many :messages, dependent: :destroy
   has_many :group_users

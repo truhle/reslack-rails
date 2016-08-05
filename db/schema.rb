@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160802160255) do
+ActiveRecord::Schema.define(version: 20160805174644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,15 @@ ActiveRecord::Schema.define(version: 20160802160255) do
     t.index ["user_id"], name: "index_messages_on_user_id", using: :btree
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.string   "token"
+    t.integer  "user_id"
+    t.string   "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id", using: :btree
+  end
+
   create_table "user_channel_stars", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "channel_id"
@@ -93,4 +102,5 @@ ActiveRecord::Schema.define(version: 20160802160255) do
   add_foreign_key "channels", "groups"
   add_foreign_key "messages", "channels"
   add_foreign_key "messages", "users"
+  add_foreign_key "sessions", "users"
 end
