@@ -26,6 +26,7 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
+    authorize_request!(@user.id, params[:token])
     if user_has_channel? && @user.update(current_channel_id: params[:current_channel_id].to_i)
       render json: :ok
     else
