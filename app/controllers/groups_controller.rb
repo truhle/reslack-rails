@@ -20,11 +20,10 @@ class GroupsController < ApplicationController
            starred_message_ids: starred_message_ids
   end
   
-  # GET /group_ids/group_prefix
-  def show_id
-    @group = Group.find_by(group_prefix: params[:group_prefix])
-    group_id = @group.id
-    render json: {group_id: group_id}
+  # GET /group_prefixes/group_prefix
+  def right_prefix?
+    group_there = Group.exists?(group_prefix: params[:group_prefix])
+    render json: {exists: group_there}
   end
 
   # POST /groups
