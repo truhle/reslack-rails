@@ -10,6 +10,13 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    @session = Session.find_by(token: params[:token], user_id: params[:user_id])
+    if @session
+      @session.destroy
+      render json: "Session destroyed", status: :ok
+    else
+      render json: "Error: session couldn't be destroyed", status: :unprocessable_entity
+    end
   end
   
 end

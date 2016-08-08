@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  get 'sessions/create'
+  get 'sessions', to: "sessions#create"
 
-  get 'sessions/destroy'
+  delete 'sessions', to: "sessions#destroy"
 
   resources :messages
   resources :channels
