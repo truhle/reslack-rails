@@ -1,7 +1,19 @@
 class MessagesChannel < ApplicationCable::Channel
 
   def subscribed
-    stream_from "messages_#{params[:reslack_channel_id]}"
+    if current_user && user_has_channel?
+      stream_from "messages_#{params[:reslack_channel_id]}"
+    end
+  end
+  
+protected
+
+  def channel_ids
+    @channel_ids ||= current_user.channels.pluck(:id)
+  end
+  
+  def user_has_channel?
+    channel_ids.include?(params[:reslack_channel_id].to_i)
   end
 
 end
