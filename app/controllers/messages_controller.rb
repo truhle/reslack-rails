@@ -31,7 +31,7 @@ class MessagesController < ApplicationController
       end
       
       message = serializer_instance.to_json
-      ActionCable.server.broadcast('messages', message)
+      ActionCable.server.broadcast("messages_#{@message.channel_id}", message)
       render json: :ok
     else
       render json: @message.errors, status: :unprocessable_entity
