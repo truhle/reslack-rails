@@ -13,12 +13,20 @@ class User < ApplicationRecord
   
   has_secure_password
   
+  def channel_ids
+    channels.pluck(:id)
+  end
+  
   def channels_by_group(group_id)     
     channels.merge(Channel.where(group_id: group_id))
   end
   
   def channel_starred?(channel_id)
     user_channel_stars.by_channel(channel_id).exists?
+  end
+  
+  def group_ids
+    groups.pluck(:id)
   end
   
   def message_starred?(message_id)

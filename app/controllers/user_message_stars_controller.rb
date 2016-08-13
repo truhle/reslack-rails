@@ -3,6 +3,8 @@ class UserMessageStarsController < ApplicationController
 # Multipurpose create/destroy action based on whether a UserMessageStar
 # matching the user and message id parameters exists
 def create
+  authorize_request!(params[:user_id], params[:token])
+  
   if @user_message_star = UserMessageStar.find_by(message_star_params)
     @user_message_star.destroy
     render json: :destroyed

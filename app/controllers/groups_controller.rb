@@ -10,6 +10,8 @@ class GroupsController < ApplicationController
 
   # GET /groups/group_prefix
   def show
+    authorize_request!(params[:user_id], params[:token])
+    
     @group = Group.find_by(group_prefix: params[:id])
     current_user = User.find(params[:user_id])
     starred_channel_ids = current_user.starred_channel_ids_by_group(@group.id)

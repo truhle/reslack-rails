@@ -41,7 +41,7 @@ class UsersController < ApplicationController
 
   private
     def user_has_channel?
-      @user.channels.pluck(:id).include?(params[:current_channel_id].to_i)
+      @user.channel_ids.include?(params[:current_channel_id].to_i)
     end
 
     # Use callbacks to share common setup or constraints between actions.

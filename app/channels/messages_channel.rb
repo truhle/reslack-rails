@@ -9,7 +9,7 @@ class MessagesChannel < ApplicationCable::Channel
 protected
 
   def channel_ids
-    @channel_ids ||= current_user.channels.pluck(:id)
+    @channel_ids ||= current_user.channel_ids
   end
   
   def user_has_channel?

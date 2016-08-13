@@ -1,7 +1,6 @@
 class MessagesController < ApplicationController
   include ::ActionController::Serialization
   
-  
   before_action :set_message, only: [:show, :update, :destroy]
 
   # GET /messages
@@ -19,7 +18,9 @@ class MessagesController < ApplicationController
   # POST /messages
   def create
     @message = Message.new(message_params)
-
+    
+    authorize_message!
+    
     if @message.save
       serializer = ActiveModel::Serializer.serializer_for(@message)
       serializer_instance = serializer.new(@messsage, new_message: true)
@@ -53,6 +54,16 @@ class MessagesController < ApplicationController
   end
 
   private
+    def authorize_message!
+      session = authorize_request!(params[:user_id], params[:token])
+      if session
+        current_user = session.user
+        current_user.group_ids.include?(@message.group_id) && current_user.channel_ids.include?(@message.channel_id)
+      else
+        fail NotAuthorizedError
+      end
+    end
+  
     # Use callbacks to share common setup or constraints between actions.
     def set_message
       @message = Message.find(params[:id])
