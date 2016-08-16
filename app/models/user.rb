@@ -13,6 +13,16 @@ class User < ApplicationRecord
   
   has_secure_password
   
+  def appear(group_id)
+    update(present: true)
+    ActionCable.server.broadcast("appearance_#{group_id}", {user_id: id, present: true})
+  end
+  
+  def disappear(group_id)
+    update(present: false)
+    ActionCable.server.broadcast("appearance_#{group_id}", {user_id: id, present: false})
+  end
+  
   def channel_ids
     channels.pluck(:id)
   end
