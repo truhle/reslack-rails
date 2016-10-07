@@ -5,6 +5,7 @@ class Group < ApplicationRecord
   has_many :channels
   has_many :group_users
   has_many :users, through: :group_users
+  has_many :user_group_presences
   has_many :messages
   
 end

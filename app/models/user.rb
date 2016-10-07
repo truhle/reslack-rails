@@ -8,18 +8,21 @@ class User < ApplicationRecord
   has_many :group_users
   has_many :groups, through: :group_users
   has_many :user_channel_stars
+  has_many :user_group_presences
   has_many :user_message_stars
   has_many :starred_messages, through: :user_message_stars, source: :message
   
   has_secure_password
   
   def appear(group_id)
-    update(present: true)
+    # update(present: true)
+    user_group_presences.create(group_id: group_id, presence: true)
     ActionCable.server.broadcast("appearance_#{group_id}", {user_id: id, present: true})
   end
   
   def disappear(group_id)
-    update(present: false)
+    # update(present: false)
+    user_group_presences.find_by(group_id: group_id).destroy
     ActionCable.server.broadcast("appearance_#{group_id}", {user_id: id, present: false})
   end
   

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160805174644) do
+ActiveRecord::Schema.define(version: 20161007194530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,14 @@ ActiveRecord::Schema.define(version: 20160805174644) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_group_presences", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "group_id"
+    t.boolean "presence"
+    t.index ["group_id"], name: "index_user_group_presences_on_group_id", using: :btree
+    t.index ["user_id"], name: "index_user_group_presences_on_user_id", using: :btree
+  end
+
   create_table "user_message_stars", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "message_id"
@@ -103,4 +111,6 @@ ActiveRecord::Schema.define(version: 20160805174644) do
   add_foreign_key "messages", "channels"
   add_foreign_key "messages", "users"
   add_foreign_key "sessions", "users"
+  add_foreign_key "user_group_presences", "groups"
+  add_foreign_key "user_group_presences", "users"
 end
