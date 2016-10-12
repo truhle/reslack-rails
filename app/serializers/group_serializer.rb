@@ -1,5 +1,6 @@
 class GroupSerializer < ActiveModel::Serializer
   attributes :group_id, :group_name, :group_prefix, :current_user,  :messages
+  
   has_many :users do |serializer|
     group = serializer.object
     group_presences = group.user_group_presences.pluck(:user_id, :presence)

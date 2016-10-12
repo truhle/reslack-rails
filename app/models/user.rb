@@ -22,7 +22,10 @@ class User < ApplicationRecord
   
   def disappear(group_id)
     # update(present: false)
-    user_group_presences.find_by(group_id: group_id).destroy
+    presences = user_group_presences.find_by(group_id: group_id)
+    if presences
+      presences.destroy
+    end
     ActionCable.server.broadcast("appearance_#{group_id}", {user_id: id, present: false})
   end
   
